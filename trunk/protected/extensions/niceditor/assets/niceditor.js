@@ -269,8 +269,8 @@ var nicEditorConfig = bkClass.extend({
 		'hr' : {name : __('Horizontal Rule'), command : 'insertHorizontalRule', noActive : true}
 	},
 	iconsPath : '../nicEditorIcons.gif',
-	buttonList : ['bold','italic','underline','left','center','right','justify','ol','ul','fontSize','indent','outdent','image','link','unlink','forecolor','bgcolor'],
-	iconList : {"bgcolor":1,"forecolor":2,"bold":3,"center":4,"hr":5,"indent":6,"italic":7,"justify":8,"left":9,"ol":10,"outdent":11,"removeformat":12,"right":13,"save":24,"strikethrough":15,"subscript":16,"superscript":17,"ul":18,"underline":19,"image":20,"link":21,"unlink":22,"close":23,"arrow":25,"upload":26}
+	buttonList : ['bold','italic','underline','left','center','right','justify','ol','ul','fontSize','indent','outdent','image','floatNone','link','unlink','forecolor','bgcolor',],
+	iconList : {"bgcolor":1,"forecolor":2,"bold":3,"center":4,"hr":5,"indent":6,"italic":7,"justify":8,"left":9,"ol":10,"outdent":11,"removeformat":12,"right":13,"save":24,"strikethrough":15,"subscript":16,"superscript":17,"ul":18,"underline":19,"image":20,"link":21,"unlink":22,"close":23,"arrow":25,"upload":26,"floatLeft":27,"floatNone":28}
 	
 });
 /* END CONFIG */
@@ -662,7 +662,7 @@ var nicEditorPanel = bkClass.extend({
 		var opt = this.ne.options;
 		var buttons = opt.buttons;
 		for(button in buttons) {
-				this.addButton(button,opt,true);
+			this.addButton(button,opt,true);
 		}
 		this.reorder();
 		e.noSelect();
@@ -1307,10 +1307,10 @@ var nicImageButton = nicEditorAdvancedButton.extend({
 			// bounding box
 			if (imgText.item[i].width == null) {
 				this.image = new bkElement('img').setAttributes({src: imgText.item[i].url, height: imgText.item[i].height}).setStyle({margin : '4px'}).appendTo(this.pane.pane);
-//			    this.image.addEvent('mousedown', function(e){EvTest(e)});
+			//    this.image.addEvent('mousedown', function(e){EvTest(e)});
 			} else {
 				this.image = new bkElement('img').setAttributes({src: imgText.item[i].url, width: imgText.item[i].width}).setStyle({margin : '4px'}).appendTo(this.pane.pane);
-//			    this.image.addEvent('mousedown', function(e){EvTest(e)});
+			//    this.image.addEvent('mousedown', function(e){EvTest(e)});
 			}
 		}
 
@@ -1333,7 +1333,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
 			this.im.setAttributes({
 				src : this.inputs['src'].value,
 				alt : this.inputs['alt'].value,
-				align : this.inputs['align'].value
+				align : this.inputs['align'].value,
 			});
 		}
 	}
@@ -1356,3 +1356,31 @@ function EvTest(e) {
 */
 
 nicEditors.registerPlugin(nicPlugin,nicImageOptions);
+
+/* START CONFIG */
+var nicImageFloatOptions = {
+	buttons : {
+		'floatNone' : {name : 'Float Image', type : 'nicImageFloatButton', tags : ['IMG']}
+	}
+	
+};
+/* END CONFIG */
+
+var nicImageFloatButton = nicEditorButton.extend({	
+	toggleFloat : function() {
+		this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
+		if(this.im) {
+			if ((val = this.im.getAttribute('float')) == 'left') {
+				this.im.setAttributes({
+					float : 'none'
+				});
+			} else {
+				this.im.setAttributes({
+					float : 'left'
+				});
+			}
+		}
+	}
+});
+
+nicEditors.registerPlugin(nicPlugin,nicImageFloatOptions);
